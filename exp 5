@@ -1,0 +1,100 @@
+
+# Experiment: EDA - Data Visualization with Matplotlib
+
+# Step 1: Import required libraries
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Step 2: Create a sample dataset
+data = {
+    'Name': ['Arun', 'Bala', 'Charan', 'Divya', 'Ezhil',
+             'Farhan', 'Gokul', 'Hari'],
+    'Age': [20, 21, 19, 22, 20, 23, 21, 19],
+    'Marks': [85, 90, 78, 92, 88, 76, 95, 82],
+    'Attendance': [90, 85, 80, 95, 88, 75, 92, 84]
+}
+
+df = pd.DataFrame(data)
+
+print("STUDENT DATASET")
+print(df)
+
+# Step 3: Line Plot
+plt.figure(figsize=(8, 5))
+plt.plot(df['Name'], df['Marks'], marker='o')
+plt.title('Student Marks - Line Plot')
+plt.xlabel('Students')
+plt.ylabel('Marks')
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+
+# Step 4: Bar Chart
+plt.figure(figsize=(8, 5))
+plt.bar(df['Name'], df['Marks'])
+plt.title('Student Marks - Bar Chart')
+plt.xlabel('Students')
+plt.ylabel('Marks')
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()
+
+# Step 5: Scatter Plot
+plt.figure(figsize=(8, 5))
+plt.scatter(df['Attendance'], df['Marks'])
+plt.title('Attendance vs Marks')
+plt.xlabel('Attendance (%)')
+plt.ylabel('Marks')
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+
+# Step 6: Histogram
+plt.figure(figsize=(8, 5))
+plt.hist(df['Marks'], bins=5, edgecolor='black')
+plt.title('Distribution of Student Marks')
+plt.xlabel('Marks')
+plt.ylabel('Frequency')
+plt.tight_layout()
+plt.show()
+
+# Step 7: Pie Chart
+plt.figure(figsize=(7, 7))
+plt.pie(
+    df['Marks'],
+    labels=df['Name'],
+    autopct='%1.1f%%',
+    startangle=90
+)
+plt.title('Student Marks Distribution')
+plt.show()
+
+# Step 8: Box Plot
+plt.figure(figsize=(8, 5))
+plt.boxplot(df['Marks'])
+plt.title('Box Plot of Student Marks')
+plt.ylabel('Marks')
+plt.tight_layout()
+plt.show()
+
+# Step 9: Multiple Line Plot
+plt.figure(figsize=(8, 5))
+plt.plot(df['Name'], df['Marks'], marker='o',
+         label='Marks')
+plt.plot(df['Name'], df['Attendance'], marker='s',
+         label='Attendance')
+plt.title('Marks and Attendance Comparison')
+plt.xlabel('Students')
+plt.ylabel('Values')
+plt.legend()
+plt.grid(True)
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()
+
+# Step 10: Display Statistical Summary
+print("\nSTATISTICAL SUMMARY")
+print(df.describe())
+
+print("\nEDA DATA VISUALIZATION COMPLETED SUCCESSFULLY")
