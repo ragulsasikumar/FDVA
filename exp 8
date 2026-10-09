@@ -1,0 +1,185 @@
+Mini Project: Smart Student Performance Analytics Dashboard
+
+
+# MINI PROJECT: SMART STUDENT PERFORMANCE ANALYTICS
+# Framework for Visual Analytics
+
+# Install required libraries:
+# pip install pandas numpy plotly streamlit
+
+import pandas as pd
+import numpy as np
+import plotly.express as px
+import streamlit as st
+
+# Step 1: Configure dashboard
+st.set_page_config(
+    page_title="Student Analytics",
+    page_icon="📊",
+    layout="wide"
+)
+
+st.title("Smart Student Performance Analytics")
+st.write("Interactive analysis of marks, attendance and study hours")
+
+# Step 2: Generate sample dataset
+np.random.seed(42)
+
+n = 100
+
+df = pd.DataFrame({
+    "Student_ID": range(101, 101 + n),
+    "Department": np.random.choice(
+        ["AIML", "CSE", "IT", "ECE"], n
+    ),
+    "Study_Hours": np.random.randint(1, 9, n),
+    "Attendance": np.random.randint(50, 101, n),
+    "Marks": np.random.randint(35, 101, n)
+})
+
+# Step 3: Calculate performance category
+def performance(marks):
+    if marks >= 85:
+        return "Excellent"
+    elif marks >= 70:
+        return "Good"
+    elif marks >= 50:
+        return "Average"
+    else:
+        return "Needs Improvement"
+
+df["Performance"] = df["Marks"].apply(performance)
+
+# Step 4: Sidebar filters
+st.sidebar.header("Dashboard Filters")
+
+departments = st.sidebar.multiselect(
+    "Select Department",
+    options=sorted(df["Department"].unique()),
+    default=sorted(df["Department"].unique())
+)
+
+filtered_df = df[df["Department"].isin(departments)]
+
+if filtered_df.empty:
+    st.warning("Select at least one department.")
+    st.stop()
+
+# Step 5: Key performance indicators
+col1, col2, col3, col4 = st.columns(4)
+
+col1.metric("Total Students", len(filtered_df))
+col2.metric(
+    "Average Marks",
+    round(filtered_df["Marks"].mean(), 2)
+)
+col3.metric(
+    "Average Attendance",
+    f"{filtered_df['Attendance'].mean():.1f}%"
+)
+col4.metric(
+    "Average Study Hours",
+    f"{filtered_df['Study_Hours'].mean():.1f}"
+)
+
+st.divider()
+
+# Step 6: Department-wise performance
+st.subheader("Department-wise Average Marks")
+
+dept_avg = (
+    filtered_df.groupby("Department", as_index=False)["Marks"]
+    .mean()
+)
+
+fig1 = px.bar(
+    dept_avg,
+    x="Department",
+    y="Marks",
+    color="Department",
+    title="Average Marks by Department",
+    text_auto=".2f"
+)
+
+st.plotly_chart(fig1, use_container_width=True)
+
+# Step 7: Attendance versus marks
+st.subheader("Attendance and Academic Performance")
+
+fig2 = px.scatter(
+    filtered_df,
+    x="Attendance",
+    y="Marks",
+    color="Performance",
+    size="Study_Hours",
+    hover_data=["Student_ID", "Department"],
+    title="Attendance vs Marks"
+)
+
+st.plotly_chart(fig2, use_container_width=True)
+
+# Step 8: Performance distribution
+st.subheader("Student Performance Distribution")
+
+performance_count = (
+    filtered_df["Performance"]
+    .value_counts()
+    .rename_axis("Performance")
+    .reset_index(name="Students")
+)
+
+fig3 = px.pie(
+    performance_count,
+    names="Performance",
+    values="Students",
+    hole=0.4,
+    title="Performance Categories"
+)
+
+st.plotly_chart(fig3, use_container_width=True)
+
+# Step 9: Study hours analysis
+st.subheader("Study Hours vs Marks")
+
+fig4 = px.box(
+    filtered_df,
+    x="Study_Hours",
+    y="Marks",
+    color="Study_Hours",
+    title="Marks Distribution by Study Hours"
+)
+
+st.plotly_chart(fig4, use_container_width=True)
+
+# Step 10: Display student records
+st.subheader("Student Data Table")
+
+st.dataframe(
+    filtered_df.sort_values("Marks", ascending=False),
+    use_container_width=True
+)
+
+# Step 11: Identify students needing attention
+st.subheader("Students Requiring Academic Support")
+
+support = filtered_df[
+    (filtered_df["Marks"] < 50) |
+    (filtered_df["Attendance"] < 75)
+]
+
+if support.empty:
+    st.success("No students meet the selected support criteria.")
+else:
+    st.dataframe(support, use_container_width=True)
+
+# Step 12: Download filtered dataset
+csv = filtered_df.to_csv(index=False).encode("utf-8")
+
+st.download_button(
+    label="Download Analytics Data",
+    data=csv,
+    file_name="student_analytics.csv",
+    mime="text/csv"
+)
+
+st.success("Student Performance Analytics Dashboard is ready!")
