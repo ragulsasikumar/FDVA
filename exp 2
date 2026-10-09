@@ -1,0 +1,68 @@
+# Experiment: EDA - Data Import and Export
+
+# Step 1: Import required library
+import pandas as pd
+import numpy as np
+import os
+
+# Step 2: Create a sample dataset
+data = {
+    'Name': ['Arun', 'Bala', 'Charan', 'Divya', 'Ezhil'],
+    'Age': [20, 21, 19, 22, 20],
+    'Department': ['AIML', 'CSE', 'AIML', 'IT', 'CSE'],
+    'Marks': [85, 90, 78, 92, 88]
+}
+
+df = pd.DataFrame(data)
+
+print("Original Dataset:")
+print(df)
+
+# Step 3: Export data to CSV
+df.to_csv('students.csv', index=False)
+print("\nData exported to students.csv successfully!")
+
+# Step 4: Import data from CSV
+df_csv = pd.read_csv('students.csv')
+print("\nData Imported from CSV:")
+print(df_csv)
+
+# Step 5: Export data to Excel
+df.to_excel('students.xlsx', index=False)
+print("\nData exported to students.xlsx successfully!")
+
+# Step 6: Import data from Excel
+df_excel = pd.read_excel('students.xlsx')
+print("\nData Imported from Excel:")
+print(df_excel)
+
+# Step 7: Display dataset information
+print("\nDataset Information:")
+df.info()
+
+# Step 8: Display statistical summary
+print("\nStatistical Summary:")
+print(df.describe())
+
+# Step 9: Check missing values
+print("\nMissing Values:")
+print(df.isnull().sum())
+
+# Step 10: Display first and last rows
+print("\nFirst 3 Rows:")
+print(df.head(3))
+
+print("\nLast 3 Rows:")
+print(df.tail(3))
+
+# Step 11: Export selected columns
+df[['Name', 'Marks']].to_csv('student_marks.csv', index=False)
+print("\nSelected columns exported to student_marks.csv!")
+
+# Step 12: Verify exported files
+print("\nExported Files:")
+for file in ['students.csv', 'students.xlsx', 'student_marks.csv']:
+    if os.path.exists(file):
+        print(file, "- Created successfully")
+
+print("\nEDA Data Import and Export completed successfully!")
