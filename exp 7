@@ -1,0 +1,91 @@
+
+# Experiment: Data Visualization Using Tableau
+
+# Step 1: Import required libraries
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Step 2: Create sample sales dataset
+data = {
+    'Product': ['Laptop', 'Mobile', 'Tablet', 'Chair', 'Table',
+                'Sofa', 'Laptop', 'Mobile', 'Chair', 'Table'],
+    'Category': ['Electronics', 'Electronics', 'Electronics',
+                 'Furniture', 'Furniture', 'Furniture',
+                 'Electronics', 'Electronics', 'Furniture',
+                 'Furniture'],
+    'Region': ['Chennai', 'Madurai', 'Coimbatore', 'Chennai',
+               'Madurai', 'Coimbatore', 'Madurai', 'Chennai',
+               'Coimbatore', 'Chennai'],
+    'Sales': [50000, 30000, 20000, 10000, 15000,
+              40000, 45000, 35000, 12000, 18000],
+    'Profit': [8000, 5000, 3000, 2000, 2500,
+               7000, 7500, 6000, 2200, 3000]
+}
+
+df = pd.DataFrame(data)
+
+# Step 3: Display the dataset
+print("SALES DATASET")
+print(df)
+
+# Step 4: Calculate total sales and profit
+print("\nTOTAL SALES:", df['Sales'].sum())
+print("TOTAL PROFIT:", df['Profit'].sum())
+
+# Step 5: Create a bar chart
+product_sales = df.groupby('Product')['Sales'].sum()
+
+plt.figure(figsize=(8, 5))
+product_sales.plot(kind='bar')
+plt.title('Sales by Product')
+plt.xlabel('Product')
+plt.ylabel('Sales')
+plt.tight_layout()
+plt.show()
+
+# Step 6: Create a pie chart
+category_sales = df.groupby('Category')['Sales'].sum()
+
+plt.figure(figsize=(7, 7))
+category_sales.plot(kind='pie', autopct='%1.1f%%')
+plt.title('Sales by Category')
+plt.ylabel('')
+plt.tight_layout()
+plt.show()
+
+# Step 7: Create a line chart
+region_sales = df.groupby('Region')['Sales'].sum()
+
+plt.figure(figsize=(8, 5))
+region_sales.plot(kind='line', marker='o')
+plt.title('Sales by Region')
+plt.xlabel('Region')
+plt.ylabel('Sales')
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+
+# Step 8: Compare sales and profit
+summary = df.groupby('Product')[['Sales', 'Profit']].sum()
+
+summary.plot(kind='bar', figsize=(9, 5))
+plt.title('Sales and Profit Comparison')
+plt.xlabel('Product')
+plt.ylabel('Amount')
+plt.tight_layout()
+plt.show()
+
+# Step 9: Export dataset for Tableau
+df.to_csv('tableau_sales_data.csv', index=False)
+
+# Step 10: Export summary
+summary.to_csv('tableau_sales_summary.csv')
+
+print("\nSALES SUMMARY")
+print(summary)
+
+print("\nFiles created:")
+print("1. tableau_sales_data.csv")
+print("2. tableau_sales_summary.csv")
+
+print("\nTableau data visualization preparation completed!")
