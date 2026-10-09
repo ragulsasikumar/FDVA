@@ -1,0 +1,67 @@
+# Experiment: EDA - Data Cleaning
+
+# Step 1: Import required libraries
+import pandas as pd
+import numpy as np
+
+# Step 2: Create a sample dataset with missing values and duplicates
+data = {
+    'Name': ['Arun', 'Bala', 'Charan', 'Divya', 'Arun', None, 'Ezhil'],
+    'Age': [20, 21, np.nan, 22, 20, 23, 19],
+    'Department': ['AIML', 'CSE', 'AIML', 'IT', 'AIML', 'CSE', None],
+    'Marks': [85, 90, 78, np.nan, 85, 88, 95]
+}
+
+df = pd.DataFrame(data)
+
+print("Original Dataset:")
+print(df)
+
+# Step 3: Display dataset information
+print("\nDataset Information:")
+print(df.info())
+
+# Step 4: Check missing values
+print("\nMissing Values:")
+print(df.isnull().sum())
+
+# Step 5: Remove duplicate rows
+df.drop_duplicates(inplace=True)
+print("\nAfter Removing Duplicates:")
+print(df)
+
+# Step 6: Fill missing numerical values with mean
+df['Age'] = df['Age'].fillna(df['Age'].mean())
+df['Marks'] = df['Marks'].fillna(df['Marks'].mean())
+
+# Step 7: Fill missing categorical values
+df['Name'] = df['Name'].fillna('Unknown')
+df['Department'] = df['Department'].fillna('Not Assigned')
+
+print("\nAfter Handling Missing Values:")
+print(df)
+
+# Step 8: Convert Age to integer
+df['Age'] = df['Age'].round().astype(int)
+
+# Step 9: Remove extra spaces from text columns
+df['Name'] = df['Name'].str.strip()
+df['Department'] = df['Department'].str.strip()
+
+# Step 10: Check missing values again
+print("\nMissing Values After Cleaning:")
+print(df.isnull().sum())
+
+# Step 11: Display statistical summary
+print("\nStatistical Summary:")
+print(df.describe())
+
+# Step 12: Display cleaned dataset
+print("\nFinal Cleaned Dataset:")
+print(df)
+
+# Step 13: Export cleaned data
+df.to_csv('cleaned_data.csv', index=False)
+print("\nCleaned dataset saved as cleaned_data.csv")
+
+print("\nEDA Data Cleaning Completed Successfully!")
